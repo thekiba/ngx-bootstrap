@@ -8,10 +8,11 @@ export class ModalsPo extends BaseComponent {
 
   modalWindow = 'modal-container';
   modalBtnSelector = 'modal-container button';
-  modalHeader = '.modal-header';
-  btnCloseInHeader = '.close';
+  modalBackdrop = '.modal-backdrop';
   modalParagraph = `${this.modalWindow} ${'p'}`;
   demoCardBlock = '.card';
+  modalPopup = '.popover-content';
+  modalTooltip = 'bs-tooltip-container';
 
   exampleDemosArr = {
     serviceTemplate: 'demo-modal-service-static',
@@ -21,6 +22,13 @@ export class ModalsPo extends BaseComponent {
     serviceEvents: 'demo-modal-service-events',
     serviceConfirm: 'demo-modal-service-confirm-window',
     serviceCustomCSS: 'demo-modal-service-custom-css-class',
+    serviceAnimation: 'demo-modal-service-disable-animation',
+    serviceESC: 'demo-modal-service-disable-esc-closing',
+    serviceToolPopup: 'demo-modal-with-popups',
+    serviceBackdrop: 'demo-modal-service-disable-backdrop',
+    serviceClassChange: 'demo-modal-change-class',
+
+
     serviceOptions: 'demo-modal-service-options',
     directiveStatic: 'demo-modal-static',
     directiveSizes: 'demo-modal-sizes',
@@ -31,8 +39,8 @@ export class ModalsPo extends BaseComponent {
   };
 
   // temporary placed here
-  isElementVisible(baseSelector: string, elementToFind: string, rowNum = 0) {
-    cy.get(`${ baseSelector } ${elementToFind}`).eq(rowNum).should('be.visible');
+  isElementVisible(baseSelector: string, elementToFind: string, elemNumber = 0) {
+    cy.get(`${ baseSelector } ${elementToFind}`).eq(elemNumber).should('be.visible');
   }
 
   isElemTextCorrect(baseSelector: string, itemSel: string, expectedText: string, rowNum = 0) {
@@ -50,12 +58,24 @@ export class ModalsPo extends BaseComponent {
       .should(visible ? 'not.to.be.enabled' : 'to.be.enabled');
   }
 
-  isModalBtnExist(btnTitle: string) {
-    cy.get(this.modalWindow).last().invoke('text')
+  isBackdropEnabled() {
+    cy.get('bs-modal-backdrop').should('to.have.class', 'show');
+  }
+
+  isBackdropDisabled() {
+    cy.get('bs-modal-backdrop').should('not.be.enabled');
+  }
+
+  clickOnBackdrop() {
+    cy.get(`${'body'} ${this.modalBackdrop}`).click({ force: true });
+  }
+
+  isModalBtnExist(btnTitle: string, elemNumber = 0) {
+    cy.get(this.modalWindow).find('button').eq(elemNumber).invoke('text')
       .should('contain', btnTitle);
   }
 
-  clickOnModalBtn(btnTitle: string, buttonIndex?: number) {
+  clickOnModalBtn(btnTitle: string) {
     cy.get(this.modalBtnSelector).contains(btnTitle).click();
   }
 
@@ -66,5 +86,12 @@ export class ModalsPo extends BaseComponent {
   isModalDemoContainsText(baseSelector: string, expectedText: string, demoNumber = 0) {
     cy.get(`${baseSelector} ${this.demoCardBlock}`).eq(demoNumber).invoke('text')
       .should('contain', expectedText);
+  }
+
+  isModalTooltipVisible() {
+    cy.get(this.modalWindow)
+      .should('to.have.descendants', this.modalTooltip)
+      .find('bs-tooltip-container')
+      .should('to.have.class', 'show');
   }
 }

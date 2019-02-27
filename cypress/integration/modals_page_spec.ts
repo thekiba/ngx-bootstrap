@@ -24,7 +24,7 @@ describe('Modals demo page test suite', () => {
       backdrop is enabled`, () => {
         modals.clickByText(templateDemo, btnText);
         modals.isModalVisible('body', true);
-        cy.get('bs-modal-backdrop').should('to.have.class', 'show');
+        modals.isBackdropEnabled();
       });
 
       it('when user clicks on the cross button then the modal is closed', () => {
@@ -33,9 +33,9 @@ describe('Modals demo page test suite', () => {
         modals.isModalDisabled('body', true);
       });
 
-      it('when user clicks outside the modal then the modal is closed', () => {
+      it('when user clicks on backdrop then the modal is closed', () => {
         modals.clickByText(templateDemo, btnText);
-        modals.clickOutside(modals.modalWindow);
+        modals.clickOnBackdrop();
         modals.isModalDisabled('body', true);
       });
 
