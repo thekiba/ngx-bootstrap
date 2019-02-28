@@ -27,8 +27,6 @@ export class ModalsPo extends BaseComponent {
     serviceToolPopup: 'demo-modal-with-popups',
     serviceBackdrop: 'demo-modal-service-disable-backdrop',
     serviceClassChange: 'demo-modal-change-class',
-
-
     serviceOptions: 'demo-modal-service-options',
     directiveStatic: 'demo-modal-static',
     directiveSizes: 'demo-modal-sizes',
@@ -40,7 +38,7 @@ export class ModalsPo extends BaseComponent {
 
   // temporary placed here
   isElementVisible(baseSelector: string, elementToFind: string, elemNumber = 0) {
-    cy.get(`${ baseSelector } ${elementToFind}`).eq(elemNumber).should('be.visible');
+    cy.get(`${baseSelector} ${elementToFind}`).eq(elemNumber).should('be.visible');
   }
 
   isElemTextCorrect(baseSelector: string, itemSel: string, expectedText: string, rowNum = 0) {
@@ -48,14 +46,14 @@ export class ModalsPo extends BaseComponent {
       .should('contain', expectedText);
   }
 
-  isModalVisible(baseSelector: string, visible: boolean) {
-    cy.get(`${baseSelector} ${this.modalWindow}`).find('.modal-content')
+  isModalVisible(visible: boolean) {
+    cy.get(`${'body'} ${this.modalWindow}`).find('.modal-content')
       .should(visible ? 'to.be.visible' : 'not.to.be.visible');
   }
 
-  isModalDisabled(baseSelector: string, visible: boolean) {
-    cy.get(`${baseSelector} ${this.modalWindow}`).find('.modal-content')
-      .should(visible ? 'not.to.be.enabled' : 'to.be.enabled');
+  isModalDisabled(disabled: boolean) {
+    cy.get(`${'body'} ${this.modalWindow}`).find('.modal-content')
+      .should(disabled ? 'not.to.be.enabled' : 'to.be.enabled');
   }
 
   isBackdropEnabled() {
@@ -93,5 +91,14 @@ export class ModalsPo extends BaseComponent {
       .should('to.have.descendants', this.modalTooltip)
       .find('bs-tooltip-container')
       .should('to.have.class', 'show');
+  }
+
+  isModalWindowWidth(expectedWidth: string) {
+    cy.get(`${this.modalWindow} ${'.modal-content'}`)
+      .should('have.css', 'width', expectedWidth);
+  }
+
+  isModalHasClass(expectedClass: string) {
+    cy.get(this.modalWindow).should('to.have.descendants', expectedClass);
   }
 }

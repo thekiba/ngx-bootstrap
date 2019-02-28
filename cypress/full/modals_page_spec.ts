@@ -23,14 +23,14 @@ describe('Modals demo page test suite', () => {
       it(`when user clicks on the button "Create template modalComponent" then modal is opened
       "Close" button is present`, () => {
         modals.clickByText(componentDemo, btnText);
-        modals.isModalVisible(componentDemo, true);
+        modals.isModalVisible(true);
         modals.isModalBtnExist(modalBtnClose, 1);
       });
 
       it('user closes modal by clicking on "Close" button', () => {
         modals.clickByText(componentDemo, btnText);
         modals.clickOnModalBtn(modalBtnClose);
-        modals.isModalDisabled('body', true);
+        modals.isModalDisabled(true);
       });
     });
 
@@ -53,7 +53,7 @@ describe('Modals demo page test suite', () => {
       it(`when user clicks on the button "Open parent modal" button then modal popup with title "First modal"
       is opened, button "Open second modal" button is present`, () => {
         modals.clickByText(nestedDemo, btnText);
-        modals.isModalVisible(nestedDemo, true);
+        modals.isModalVisible(true);
         cy.get('h4').should('contain', firstModalTitle);
         modals.isModalBtnExist(open2ndModal, 1);
       });
@@ -63,7 +63,7 @@ describe('Modals demo page test suite', () => {
         modals.clickByText(nestedDemo, btnText);
         modals.clickOnModalBtn(open2ndModal);
         cy.get('h4').last().should('contain', secondModalTitle);
-        modals.isModalBtnExist(close1stModal, 1);
+        modals.isModalBtnExist(close1stModal, 3);
         modals.checkElementsQuantity(modals.modalWindow, 2);
       });
 
@@ -82,25 +82,23 @@ describe('Modals demo page test suite', () => {
 
       const scrollDemo = modals.exampleDemosArr.serviceScroll;
       const btnText = 'Open modal';
-      const modalBtnClose = 'Close';
 
       it('example contains the button "Create modalComponent with component"', () => {
         modals.isButtonExist(scrollDemo, btnText);
       });
 
-      it(`when user clicks on the button "Open modal" button then modal is opened,
-        button "Open second modal" button is present`, () => {
+      it.only(`when user clicks on the button "Open modal" button then modal is opened
+        the text has 15 paragraphs`, () => {
         modals.clickByText(scrollDemo, btnText);
-        modals.isModalVisible(scrollDemo, true);
+        modals.isModalVisible(true);
+        modals.checkElementsQuantity(modals.modalParagraph, 15);
       });
 
-      it('when user scroll content by mousewheel, content is scrolled successfully (the text has 15 paragraphs)',
-        () => {
-          modals.clickByText(scrollDemo, btnText);
-          modals.checkElementsQuantity(modals.modalParagraph, 15);
-          cy.get(modals.modalParagraph).last().scrollIntoView();
-          modals.isElementVisible(modals.modalWindow, modals.modalParagraph, 14);
-        });
+      it('when user scroll content by mousewheel, content is scrolled successfully', () => {
+        modals.clickByText(scrollDemo, btnText);
+        cy.get(modals.modalParagraph).last().scrollIntoView();
+        modals.isElementVisible('body', modals.modalParagraph, 14);
+      });
     });
 
     describe('Events', () => {
@@ -125,7 +123,7 @@ describe('Modals demo page test suite', () => {
       it(`when user clicks on "Open modal" button then modal is opened then should be two messages
       "onShow event has been fired" and "onShown event has been fired"`, () => {
         modals.clickByText(eventsDemo, btnText);
-        modals.isModalVisible(eventsDemo, true);
+        modals.isModalVisible(true);
         modals.isModalDemoContainsText(eventsDemo, demoOnShowFired);
         modals.isModalDemoContainsText(eventsDemo, demoOnShownFired, 1);
       });
@@ -134,7 +132,7 @@ describe('Modals demo page test suite', () => {
       and "onHidden event has been fired"`, () => {
         modals.clickByText(eventsDemo, btnText);
         modals.clickOnModalBtn(btnX);
-        modals.isModalVisible(eventsDemo, false);
+        modals.isModalDisabled(true);
         cy.wait(500); // TODO: make without a wait
         modals.isModalDemoContainsText(eventsDemo, demoOnHideFired, 2);
         modals.isModalDemoContainsText(eventsDemo, demoOnHiddenFired, 3);
@@ -144,7 +142,7 @@ describe('Modals demo page test suite', () => {
     "onHide event has been fired" and "onHidden event has been fired"`, () => {
         modals.clickByText(eventsDemo, btnText);
         modals.clickOutside(modals.modalWindow);
-        modals.isModalVisible(eventsDemo, false);
+        modals.isModalDisabled(true);
         cy.wait(500); // TODO: make without a wait
         modals.isModalDemoContainsText(eventsDemo, demoHideDismissed, 2);
         modals.isModalDemoContainsText(eventsDemo, demoHiddenDismissed, 3);
@@ -172,22 +170,22 @@ describe('Modals demo page test suite', () => {
       it('when user clicks on "Open modal" button then modal is opened, it contains two buttons: "Yes" and "No"',
         () => {
           modals.clickByText(confirmDemo, btnText);
-          modals.isModalVisible('body', true);
-          modals.isModalBtnExist(btnYes, 1);
-          modals.isModalBtnExist(btnNo, 2);
+          modals.isModalVisible(true);
+          modals.isModalBtnExist(btnYes);
+          modals.isModalBtnExist(btnNo, 1);
         });
 
       it('when user clicks on "Yes" button then modal is closed, message "Confirmed!" is displayed', () => {
         modals.clickByText(confirmDemo, btnText);
         modals.clickOnModalBtn(btnYes);
-        modals.isModalDisabled('body', true);
+        modals.isModalDisabled(true);
         modals.isModalDemoContainsText(confirmDemo, demoTextConfirmed);
       });
 
       it('when user clicks on "No" button then modal is closed, message "Declined!" is displayed', () => {
         modals.clickByText(confirmDemo, btnText);
         modals.clickOnModalBtn(btnNo);
-        modals.isModalDisabled('body', true);
+        modals.isModalDisabled(true);
         modals.isModalDemoContainsText(confirmDemo, demoTextDeclined);
       });
 
@@ -213,13 +211,13 @@ describe('Modals demo page test suite', () => {
 
       it('when user clicks on "Open modal with custom css class" button then modal is opened', () => {
         modals.clickByText(customCSSDemo, btnText);
-        modals.isModalVisible('body', true);
+        modals.isModalVisible(true);
       });
 
       it('when user clicks on the cross button then the modal is closed', () => {
         modals.clickByText(customCSSDemo, btnText);
         modals.clickOnModalBtn(btnX);
-        modals.isModalDisabled('body', true);
+        modals.isModalDisabled(true);
       });
     });
 
@@ -241,11 +239,11 @@ describe('Modals demo page test suite', () => {
 
       it('when user clicks on "Open modal" button then modal is opened. it appears with animations effects', () => {
         modals.clickByText(animationDemo, btnText);
-        modals.isModalVisible('body', true);
+        modals.isModalVisible(true);
         // can't check if the animation works
       });
 
-      it('When user clicks on "Disable animation" button then title of the button is changed to "Enable animation"',
+      it('when user clicks on "Disable animation" button then title of the button is changed to "Enable animation"',
         () => {
           modals.clickByText(animationDemo, btnDisable);
           modals.isButtonExist(animationDemo, btnEnable, 1);
@@ -253,13 +251,13 @@ describe('Modals demo page test suite', () => {
 
       it('after that click on "Open modal" button, modal popup is opened without animations effects', () => {
         modals.clickByText(animationDemo, btnText);
-        modals.isModalVisible('body', true);
+        modals.isModalVisible(true);
       });
 
       it('when user clicks on the cross button then the modal is closed', () => {
         modals.clickByText(animationDemo, btnText);
         modals.clickOnModalBtn(btnX);
-        modals.isModalDisabled('body', true);
+        modals.isModalDisabled(true);
       });
     });
 
@@ -282,7 +280,7 @@ describe('Modals demo page test suite', () => {
       ESC button then modal stays opened`, () => {
         modals.clickByText(escapeDemo, btnText);
         cy.get(modals.modalWindow).type('{esc}');
-        modals.isModalVisible('body', true);
+        modals.isModalVisible(true);
       });
 
       it(`when user clicks on "Disable Esc" button then title of the button is changed to "Enable animation"`,
@@ -295,7 +293,7 @@ describe('Modals demo page test suite', () => {
       is closed`, () => {
         modals.clickByText(escapeDemo, btnText);
         cy.get(modals.modalWindow).type('{esc}');
-        modals.isModalDisabled('body', true);
+        modals.isModalDisabled(true);
       });
     });
 
@@ -316,7 +314,7 @@ describe('Modals demo page test suite', () => {
       it(`when user clicks on "Open modal" button then modal is opened. the buttons "popover" and "tooltip"
        are present`, () => {
         modals.clickByText(toolPopupDemo, btnText);
-        modals.isModalVisible('body', true);
+        modals.isModalVisible(true);
         modals.isModalBtnExist(btnPopover, 1);
         modals.isModalBtnExist(btnTooltip, 2);
       });
@@ -327,7 +325,7 @@ describe('Modals demo page test suite', () => {
         modals.isElementVisible('body', modals.modalPopup);
       });
 
-      it.only(`when user hover on "tooltip" button then a popup is shown"`,
+      it(`when user hover on "tooltip" button then a popup is shown`,
         () => {
           modals.clickByText(toolPopupDemo, btnText);
           cy.get(modals.modalWindow).contains('tooltip').focus();
@@ -350,17 +348,16 @@ describe('Modals demo page test suite', () => {
       it('example contains the buttons "Open modal", "Disable backdrop" and "Enable backdrop"', () => {
         modals.isButtonExist(backdropDemo, btnText);
         modals.isButtonExist(backdropDemo, btnDisable, 1);
-        modals.isButtonExist(backdropDemo, btnEnable, 2);
+        modals.isButtonExist(backdropDemo, btnDisableClick, 2);
       });
 
       it('when user clicks on "Open modal" button then modal is opened, it can be closed by clicking on a backdrop',
         () => {
           modals.clickByText(backdropDemo, btnText);
-          modals.isModalVisible('body', true);
-          // cy.get(`${'body'} ${modals.modalBackdrop}`).should('have.class', 'show');
+          modals.isModalVisible(true);
           modals.isBackdropEnabled();
           cy.get(`${'body'} ${modals.modalBackdrop}`).click({ force: true });
-          modals.isModalDisabled('body', true);
+          modals.isModalDisabled(true);
         });
 
       it(`when user clicks "Disable backdrop" then title of the button changes to "Enable background", after
@@ -368,9 +365,9 @@ describe('Modals demo page test suite', () => {
         modals.clickByText(backdropDemo, btnDisable);
         modals.isButtonExist(backdropDemo, btnEnable, 1);
         modals.clickByText(backdropDemo, btnText);
-        modals.isModalVisible('body', true);
+        modals.isModalVisible(true);
         modals.isBackdropDisabled();
-        modals.isModalDisabled('body', true);
+        modals.isModalDisabled(true);
       });
 
       it(`when user clicks on "Disable backdrop click" button, title of button should change to "Enable backdrop click",
@@ -378,10 +375,10 @@ describe('Modals demo page test suite', () => {
         modals.clickByText(backdropDemo, btnDisableClick);
         modals.isButtonExist(backdropDemo, btnEnableClick, 2);
         modals.clickByText(backdropDemo, btnText);
-        modals.isModalVisible('body', true);
+        modals.isModalVisible(true);
         modals.isBackdropEnabled();
         modals.clickOnBackdrop();
-        modals.isModalVisible('body', true);
+        modals.isModalVisible(true);
       });
     });
 
@@ -393,68 +390,71 @@ describe('Modals demo page test suite', () => {
       const classChangeDemo = modals.exampleDemosArr.serviceClassChange;
       const btnText = 'Create template modal';
       const btnChangeWidth = 'Change width';
-      const modalWidth300 = '300px';
-      const modalWidth800 = '800px';
-      const modalClassS = 'modal-dialog modal-sm';
-      const modalClassL = 'modal-dialog modal-lg';
+      const width300px = '300px';
+      const width800px = '800px';
+      const modalClassSM = '.modal-dialog.modal-sm';
+      const modalClassLG = '.modal-dialog.modal-lg';
 
       it('example contains the buttons "Create template modal"', () => {
         modals.isButtonExist(classChangeDemo, btnText);
       });
 
-      it.only(`when user clicks on "Create template modal" button then modal is opened, "Change width" button is present.
-       the modal has width 300px and class "modal-dialog modal-sm"`,
+      it(`when user clicks on "Create template modal" button then modal is opened, "Change width" button
+       is present. the modal has width 300px and class "modal-dialog modal-sm"`,
         () => {
           modals.clickByText(classChangeDemo, btnText);
-          modals.isModalVisible('body', true);
+          modals.isModalVisible(true);
           modals.isModalBtnExist(btnChangeWidth, 1);
-
-          // TODO: continue work from here!
-          // cy.get(modals.modalWindow).should('to.have.descendants', '.modal-dialog.modal-sm');
-          cy.get(`${modals.modalWindow} ${'.modal-content'}`).should('have.css', 'width', '300px');
-
+          modals.isModalWindowWidth(width300px);
+          modals.isModalHasClass(modalClassSM);
         });
 
       it(`when user click on the button "Change width" then width of the modal is changed to 800px and
       the modal class changed to "modal-dialog modal-lg"`, () => {
         modals.clickByText(classChangeDemo, btnText);
+        modals.isModalVisible(true);
         modals.clickOnModalBtn(btnChangeWidth);
+        modals.isModalWindowWidth(width800px);
+        modals.isModalHasClass(modalClassLG);
+      });
+    });
+  });
 
-        cy.get(modals.modalWindow).should('have.class', modalClassL);
+  describe('Directive examples', () => {
+    describe('Static modal', () => {
+      const statciModalDemo = modals.exampleDemosArr.directiveStatic;
+      const btnText = 'Static modal';
+
+      it('example contains the buttons "Static modal"', () => {
+        modals.isButtonExist(statciModalDemo, btnText);
+      });
+
+      it('directive static modal can be closed by clicking Close button', () => {
+        modals.clickByText(statciModalDemo, btnText);
+
+        // TODO: continue from here!
+        cy.get(`${statciModalDemo} ${modals.modalContent}`).as('staticMod')
+          .should('to.be.visible');
+
+        cy.get(`${statciModalDemo} ${modals.modalHeader} ${modals.btnCloseInHeader}`).click();
+        cy.get(`${statciModalDemo} ${modals.backDirectiveMod}`)
+          .should('not.to.be.visible');
       });
     });
 
+    describe('Child modal', () => {
+      const childModals = modals.exampleDemosArr.directiveChild;
+      const buttonText = 'Open child modal';
 
-    // describe('Directive examples', () => {
-    //   describe('Static modal', () => {
-    //     const staticModal = modals.exampleDemosArr.directiveStatic;
-    //     const buttonText = 'Static modal';
-    //
-    //     it('directive static modal can be closed by clicking Close button', () => {
-    //       modals.clickByText(staticModal, buttonText);
-    //       cy.get(`${ staticModal } ${ modals.modalContent }`).as('staticMod')
-    //         .should('to.be.visible');
-    //
-    //       cy.get(`${ staticModal } ${ modals.modalHeader } ${ modals.btnCloseInHeader }`).click();
-    //       cy.get(`${ staticModal } ${ modals.backDirectiveMod }`)
-    //         .should('not.to.be.visible');
-    //     });
-    //   });
-    //
-    //   describe('Child modal', () => {
-    //     const childModals = modals.exampleDemosArr.directiveChild;
-    //     const buttonText = 'Open child modal';
-    //
-    //     it('directive child modal can be closed by backdrop click', () => {
-    //       modals.clickByText(childModals, buttonText);
-    //       cy.get(`${ childModals } ${ modals.modalContent }`)
-    //         .should('to.be.visible');
-    //
-    //       cy.get(`${ childModals } ${ modals.backDirectiveMod }`).as('childModBack').click();
-    //       cy.get('@childModBack')
-    //         .should('not.to.be.visible');
-    //     });
-    //   });
-    // });
+      it('directive child modal can be closed by backdrop click', () => {
+        modals.clickByText(childModals, buttonText);
+        cy.get(`${childModals} ${modals.modalContent}`)
+          .should('to.be.visible');
+
+        cy.get(`${childModals} ${modals.backDirectiveMod}`).as('childModBack').click();
+        cy.get('@childModBack')
+          .should('not.to.be.visible');
+      });
+    });
   });
 });
