@@ -77,11 +77,9 @@ jobs:
     - stage: "Before testing publishing"
       install: true
       script: npm run publish:ci
-      before_deploy:
-      - cd dist
       deploy:
         provider: script
-        script: "npm publish"
+        script: "cp .npmrc.template $HOME/.npmrc && npm publish dist"
         skip_cleanup: true
         on:
           all_branches: true

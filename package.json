@@ -15,7 +15,7 @@
     "demo.serve": "run-s demo.build lite-server",
     "demo.serve-universal": "run-s build:dynamic serve:dynamic",
     "demo.deploy": "run-s demo.build demo.deploy-gh-pages",
-    "link": "npm link ./dist && npm link ngx-bootstrap",
+    "link": "sudo npm link ./dist && npm link ngx-bootstrap",
     "lint-pretty": "prettier --config .prettierrc --write -l  \"{demo/src,src}/**/*.ts\"",
     "lint-src": "tslint \"src/**/*.ts\" -c tslint.json -p src/tsconfig.spec.json -e \"src/chronos/**\"",
     "lint": "exit 0",
