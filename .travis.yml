@@ -77,17 +77,15 @@ jobs:
     - stage: "Before testing publishing"
       install: true
       script: npm run publish:ci
-      before_deploy:
-      - cd dist
-      deploy:
-        provider: script
-        script: "npm publish"
-        email: "mvitaliyd@gmail.com"
-        api_key: $NPM_AUTH_TOKEN_CI
-        tag: test
-        skip_cleanup: true
-        on:
-          all_branches: true
+        - cd dist
+      provider: script
+      - script: "npm publish"
+      email: "mvitaliyd@gmail.com"
+      api_key: $NPM_AUTH_TOKEN_CI
+      tag: test
+      skip_cleanup: true
+      on:
+        all_branches: true
     - stage: Testing
 #   lint code
       script: npm run lint-src
