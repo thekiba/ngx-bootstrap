@@ -77,6 +77,15 @@ jobs:
       script: npm run lint-src
       name: "Lint"
       install: true
+    - script: npm run build:publish
+      name: "Build & publish to npm"
+      before_deploy: "cd dist"
+      deploy:
+        provider: npm
+        email: "mvitaliyd@gmail.com"
+        api_key: $NPM_AUTH_TOKEN_CI
+        tag: %{commit}
+        skip_cleanup: true
 #   test
     - script: npm run test-coverage
       name: "Test with current Angular version"
