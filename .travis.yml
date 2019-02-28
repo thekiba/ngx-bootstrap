@@ -33,7 +33,7 @@ testPostDeploy: &testPostDeploy
 
 stages:
   - name: "Before testing publishing"
-    if: type = push
+    if: ( branch = development AND type = push ) OR type = pull_request
   - name: Testing
     if: ( branch = development AND type = push ) OR type = pull_request OR tag =~ ^v\d+
   - name: deploy
@@ -80,7 +80,8 @@ jobs:
       before_deploy:
       - cd dist
       deploy:
-        provider: npm
+        provider: script
+        script: "npm publish"
         email: "mvitaliyd@gmail.com"
         api_key: $NPM_AUTH_TOKEN_CI
         tag: test
