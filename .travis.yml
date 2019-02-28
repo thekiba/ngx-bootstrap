@@ -32,8 +32,8 @@ testPostDeploy: &testPostDeploy
   script: CYPRESS_baseUrl=$BASE_URL npm run cy:run:all -- --record --key $CY_KEY --parallel --group $CI_THREAD_INDEX --ci-build-id PostDeploy-$CI_THREAD_INDEX-$TRAVIS_BUILD_ID
 
 stages:
-  - name: "Before testing deploy"
-    if: ( branch = development AND type = push ) OR type = pull_request OR tag =~ ^v\d+
+  - name: "Before testing publishing"
+    if: ( branch = development AND type = push ) OR type = pull_request
   - name: Testing
     if: ( branch = development AND type = push ) OR type = pull_request OR tag =~ ^v\d+
   - name: deploy
@@ -85,6 +85,8 @@ jobs:
         api_key: $NPM_AUTH_TOKEN_CI
         tag: test
         skip_cleanup: true
+        on:
+          all_branches: true
     - stage: Testing
 #   lint code
       script: npm run lint-src
