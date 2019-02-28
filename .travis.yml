@@ -33,7 +33,7 @@ testPostDeploy: &testPostDeploy
 
 stages:
   - name: "Before testing publishing"
-    if: ( branch = development AND type = push ) OR type = pull_request
+    if: type = push
   - name: Testing
     if: ( branch = development AND type = push ) OR type = pull_request OR tag =~ ^v\d+
   - name: deploy
@@ -86,7 +86,7 @@ jobs:
         tag: test
         skip_cleanup: true
         on:
-          branch: ci-update-process
+          all_branches: true
     - stage: Testing
 #   lint code
       script: npm run lint-src
