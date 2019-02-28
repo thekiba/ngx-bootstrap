@@ -76,7 +76,7 @@ jobs:
 # run in parallel
     - stage: "Before testing publishing"
       install: true
-      script: npm run build:publish
+      script: npm run publish:ci
       before_deploy:
       - cd dist
       deploy:
@@ -86,7 +86,7 @@ jobs:
         tag: test
         skip_cleanup: true
         on:
-          all_branches: true
+          branch: ci-update-process
     - stage: Testing
 #   lint code
       script: npm run lint-src
