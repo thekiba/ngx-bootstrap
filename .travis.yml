@@ -78,7 +78,7 @@ jobs:
       install: true
       script:
       - npm run publish:ci
-      - npm config set '//registry.npmjs.org/:_authToken' $NPM_AUTH_TOKEN
+      - npm config set '//registry.npmjs.org/:_authToken' $NPM_AUTH_TOKEN_CI
       - npm publish dist
       skip_cleanup: true
       on:
