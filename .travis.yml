@@ -77,14 +77,12 @@ jobs:
     - stage: "Before testing publishing"
       install: true
       script:
-      - '[ "${TRAVIS_PULL_REQUEST}" = "false" ]
       - npm run publish:ci
-      deploy:
-        provider: script
-        script: "cp .npmrc.template $HOME/.npmrc && npm publish dist"
-        skip_cleanup: true
-        on:
-          all_branches: true
+      - npm config set '//registry.npmjs.org/:_authToken' $NPM_AUTH_TOKEN
+      - npm publish dist
+      skip_cleanup: true
+      on:
+        all_branches: true
     - stage: Testing
 #   lint code
       script: npm run lint-src
