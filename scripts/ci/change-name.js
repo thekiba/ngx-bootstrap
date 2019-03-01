@@ -3,7 +3,7 @@
 const fs = require('fs-extra');
 const pathToJSONFile = 'dist/package.json';
 const NGX_BOOTSRAP = 'ngx-bootstrap';
-const NGX_BOOTSRAP_CI = 'ngx-bootstrap-ci';
+const NGX_BOOTSRAP_CI = 'ngx-bs-ci';
 
 changeName();
 
