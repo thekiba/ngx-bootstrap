@@ -79,8 +79,8 @@ jobs:
       script:
       - npm run publish:ci
       - npm config set '//registry.npmjs.org/:_authToken' $NPM_AUTH_TOKEN_CI
-      - npm publish —tag %{commit}
-      - npm unpublish —tag %{commit} --force
+      - npm publish —tag $TRAVIS_PULL_REQUEST_SHA
+      - npm unpublish —tag $TRAVIS_PULL_REQUEST_SHA --force
       skip_cleanup: true
       on:
         all_branches: true
