@@ -76,7 +76,9 @@ jobs:
 # run in parallel
     - stage: "Before testing publishing"
       install: true
-      script: npm run publish:ci
+      script:
+      - '[ "${TRAVIS_PULL_REQUEST}" = "false" ]
+      - npm run publish:ci
       deploy:
         provider: script
         script: "cp .npmrc.template $HOME/.npmrc && npm publish dist"
